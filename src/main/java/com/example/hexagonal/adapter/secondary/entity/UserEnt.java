@@ -7,11 +7,11 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "users")
-public class User {
-    public User() {
+public class UserEnt {
+    public UserEnt() {
     }
 
-    public User(Integer id, String firstName, String lastName, Date birthDate) {
+    public UserEnt(Integer id, String firstName, String lastName, Date birthDate) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -62,8 +62,8 @@ public class User {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        User user = (User) o;
-        return Objects.equals(id, user.id) && Objects.equals(firstName, user.firstName) && Objects.equals(lastName, user.lastName) && Objects.equals(birthDate, user.birthDate);
+        UserEnt userEnt = (UserEnt) o;
+        return Objects.equals(id, userEnt.id) && Objects.equals(firstName, userEnt.firstName) && Objects.equals(lastName, userEnt.lastName) && Objects.equals(birthDate, userEnt.birthDate);
     }
 
     @Override

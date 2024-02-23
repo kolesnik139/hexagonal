@@ -2,7 +2,7 @@ package com.example.hexagonal.adapter.primary.controller;
 
 import com.example.hexagonal.appcore.model.UserMdl;
 import com.example.hexagonal.appcore.service.UserService;
-import com.example.hexagonal.mapper.UserMapper;
+import com.example.hexagonal.adapter.primary.mapper.UserDtoMapper;
 import com.example.hexagonal.adapter.primary.dto.UserDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,17 +17,20 @@ public class UserController {
     @Autowired
     UserService userService;
 
+    @Autowired
+    UserDtoMapper userDtoMapper;
+
     @PostMapping
     public UserDto saveUser(@RequestBody UserDto userDto){
-        UserMdl userMdl = UserMapper.INSTANCE.userDtoToUserMdl(userDto);
+        UserMdl userMdl = userDtoMapper.userDtoToUserMdl(userDto);
         UserMdl savedUserMdl = userService.saveUser(userMdl);
-        return UserMapper.INSTANCE.userMdlToUserDto(savedUserMdl);
+        return userDtoMapper.userMdlToUserDto(savedUserMdl);
     }
 
     @GetMapping
     public List<UserDto> getUsers(){
         List<UserMdl> userMdls = userService.getUsers();
-        return UserMapper.INSTANCE.userMdlListToUserDtoList(userMdls);
+        return userDtoMapper.userMdlListToUserDtoList(userMdls);
     }
 
     @GetMapping("/{id}")
@@ -35,7 +38,7 @@ public class UserController {
         Optional<UserMdl> userMdl = userService.getUserById(id);
 
         if (userMdl.isPresent()) {
-            UserDto userDto = UserMapper.INSTANCE.userMdlToUserDto(userMdl.get());
+            UserDto userDto = userDtoMapper.userMdlToUserDto(userMdl.get());
             return ResponseEntity.ok(userDto);
         } else {
             return ResponseEntity.notFound().build();

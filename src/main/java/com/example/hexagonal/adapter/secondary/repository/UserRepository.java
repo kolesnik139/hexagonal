@@ -1,9 +1,9 @@
 package com.example.hexagonal.adapter.secondary.repository;
 
-import com.example.hexagonal.adapter.secondary.entity.User;
+import com.example.hexagonal.adapter.secondary.entity.UserEnt;
 import com.example.hexagonal.appcore.model.UserMdl;
 import com.example.hexagonal.appcore.port.IUserRepository;
-import com.example.hexagonal.mapper.UserMapper;
+import com.example.hexagonal.adapter.secondary.mapper.UserEntMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -15,22 +15,25 @@ public class UserRepository implements IUserRepository{
     @Autowired
     UserJPARepository userRepository;
 
+    @Autowired
+    UserEntMapper userEntMapper;
+
     @Override
     public UserMdl saveUser(UserMdl userMdl) {
-        User user = UserMapper.INSTANCE.userMdlToUser(userMdl);
-        User savedUser = userRepository.save(user);
-        return UserMapper.INSTANCE.userToUserMdl(savedUser);
+        UserEnt userEnt = userEntMapper.userMdlToUser(userMdl);
+        UserEnt savedUserEnt = userRepository.save(userEnt);
+        return userEntMapper.userToUserMdl(savedUserEnt);
     }
 
     @Override
     public List<UserMdl> getUsers() {
-        List<User> users = userRepository.findAll();
-        return UserMapper.INSTANCE.userListToUserMdlList(users);
+        List<UserEnt> userEnts = userRepository.findAll();
+        return userEntMapper.userListToUserMdlList(userEnts);
     }
 
     @Override
     public Optional<UserMdl> getUserById(Integer id) {
-        Optional<User> user = userRepository.findById(id);
-        return UserMapper.INSTANCE.optionalUserToOptionalUserMdl(user);
+        Optional<UserEnt> user = userRepository.findById(id);
+        return userEntMapper.optionalUserToOptionalUserMdl(user);
     }
 }
