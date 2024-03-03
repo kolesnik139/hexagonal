@@ -12,28 +12,32 @@ import java.util.Optional;
 
 @Repository
 public class UserRepository implements IUserRepository{
-    @Autowired
-    UserJPARepository userRepository;
 
     @Autowired
+    public UserRepository(UserJPARepository userJPARepository, UserEntMapper userEntMapper) {
+        this.userJPARepository = userJPARepository;
+        this.userEntMapper = userEntMapper;
+    }
+
+    UserJPARepository userJPARepository;
     UserEntMapper userEntMapper;
 
     @Override
     public UserMdl saveUser(UserMdl userMdl) {
         UserEnt userEnt = userEntMapper.userMdlToUser(userMdl);
-        UserEnt savedUserEnt = userRepository.save(userEnt);
+        UserEnt savedUserEnt = userJPARepository.save(userEnt);
         return userEntMapper.userToUserMdl(savedUserEnt);
     }
 
     @Override
     public List<UserMdl> getUsers() {
-        List<UserEnt> userEnts = userRepository.findAll();
+        List<UserEnt> userEnts = userJPARepository.findAll();
         return userEntMapper.userListToUserMdlList(userEnts);
     }
 
     @Override
     public Optional<UserMdl> getUserById(Integer id) {
-        Optional<UserEnt> user = userRepository.findById(id);
+        Optional<UserEnt> user = userJPARepository.findById(id);
         return userEntMapper.optionalUserToOptionalUserMdl(user);
     }
 }

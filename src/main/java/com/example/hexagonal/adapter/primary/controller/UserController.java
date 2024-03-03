@@ -14,10 +14,14 @@ import java.util.Optional;
 @RestController
 @RequestMapping("api/user")
 public class UserController {
-    @Autowired
-    UserService userService;
 
     @Autowired
+    public UserController(UserService userService, UserDtoMapper userDtoMapper) {
+        this.userService = userService;
+        this.userDtoMapper = userDtoMapper;
+    }
+
+    UserService userService;
     UserDtoMapper userDtoMapper;
 
     @PostMapping

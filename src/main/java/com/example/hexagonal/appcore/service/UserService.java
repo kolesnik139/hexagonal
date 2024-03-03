@@ -12,6 +12,10 @@ import java.util.Optional;
 public class UserService {
 
     @Autowired
+    public UserService(IUserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
     IUserRepository userRepository;
 
     public UserMdl saveUser(UserMdl userMdl){
